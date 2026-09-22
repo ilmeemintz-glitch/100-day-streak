@@ -345,5 +345,28 @@ function onGuideBackdrop(e){if(e.target===document.getElementById('guidePanel'))
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&hasCompletedOnboarding())render()});
 if(hasCompletedOnboarding()){document.getElementById('cover').classList.add('hidden');document.getElementById('onboarding').classList.add('hidden');enterApp()}
 </script>
+  <script>
+(function(){
+  function addResetButton(){
+    var sheet=document.querySelector('#settingsPanel .settings-sheet');
+    if(!sheet||document.getElementById('resetChallengeBtn'))return;
+    var cancel=sheet.querySelector('.settings-cancel');
+    var btn=document.createElement('button');
+    btn.id='resetChallengeBtn';
+    btn.type='button';
+    btn.textContent='Start over at Day 1';
+    btn.setAttribute('onclick','resetChallenge()');
+    btn.style.cssText='display:block;width:100%;margin:0 0 10px;padding:14px;border:none;border-radius:14px;background:transparent;color:#c0392b;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit';
+    if(cancel){sheet.insertBefore(btn,cancel);}else{sheet.appendChild(btn);}
+  }
+  window.resetChallenge=function(){
+    var ok=confirm('Reset your tracker to Day 1?\n\nThis erases your current streak and daily history and starts you fresh today. This cannot be undone.');
+    if(!ok)return;
+    try{localStorage.removeItem('s100_v7');}catch(e){}
+    location.reload();
+  };
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',addResetButton);}else{addResetButton();}
+})();
+</script>
 </body>
 </html>
